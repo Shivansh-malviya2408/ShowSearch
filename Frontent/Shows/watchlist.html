@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Watchlist</title>
+  <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css">
+  <style>
+     body
+      {
+        margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* height: 100vh; */
+    width: 100vw;
+   background-color: black;
+
+   /* backdrop-filter: blur(8px); */
+   /* -webkit-backdrop-filter: blur(8px); */
+      
+      }
+
+      .container
+      {
+        display: flex;
+        flex-wrap: wrap;
+      }
+
+      .item-container
+      {
+        display: flex;
+        flex-wrap: wrap;
+        height: 100vh;
+        width: 100vw;
+        /* border: 2px solid white; */
+        gap: 5vw;
+        padding: 5vw;
+      }
+      .item{
+        width: 15vw;
+        height: 45vh;
+        border: 2px solid white;
+        justify-content: center;
+        align-items: center;
+        border-top-left-radius: 3vw;
+        overflow: hidden;
+        border-bottom-right-radius: 3vw;
+        &:hover{
+        transform: scale(0.9);
+        border-radius: 1vw;
+        transition-duration: .3s;
+    }
+      }
+      .item>img
+      {
+        height: 20vw;
+        width: 15vw;
+    border-radius: 0.5vw;
+  
+      }
+      .item>h3{
+        color: white;
+        text-align: center;
+      }
+
+
+      .header-container
+      {
+        display: flex;
+        /* border: 2px solid white; */
+        width: 100vw;
+        justify-content:space-between;
+        align-items: center;
+        padding: 2vw 1vw;
+
+      }
+      .header-container>h2
+      {
+        color:white;
+      }
+      .header-container span>i{
+        color: white;
+        font-size: 3vw;
+      }
+      .username
+      {
+        transform: translateX(4vw);
+        background-color: transparent;
+        outline: none;
+        border: none;
+        font-size:3.0vw;
+        color: white;
+
+      }
+
+
+      .logout>button
+      {
+        height: 3vw;
+    width: 7vw;
+    font-size: 1.2vw;
+    border-radius: 3vw;
+    outline: none;
+    background-color:rgb(255, 0, 0);
+    font-weight: 900;
+    color: white;
+      }
+
+      #userNameFetch
+      {
+        font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            font-weight:900;
+            color:white;
+      }
+      
+      
+
+
+
+  </style>
+</head>
+<body>
+   
+
+  <div class="container">
+    <div class="header-container">
+      <button class="username" id="usr"><i class="ri-account-circle-line"><span id="userNameFetch" style="font-size: 2.3vw;"></span></i></button>
+      <h2 style="font-size:2.5vw; color: rgb(255, 204, 0);">Watchlist   <i class="ri-play-circle-fill" style="color: rgb(255, 204, 0); "></i> </h2>
+      <div class="logout"  ><button onclick="logout()">Logout <i class="ri-logout-box-line"></i></button></div>
+
+    </div>
+    
+    <div id="watchlist-container" class="item-container"></div>
+  </div>
+
+  <script>
+    const span=document.getElementById('usr')
+    usr.addEventListener('click',()=>
+  {
+    window.location.href="http://127.0.0.1:5501/Frontent/Shows/index.html"
+  })
+  </script>
+
+   
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+  const token = localStorage.getItem('token');
+  if (token) {
+    fetchData('watchlist', token);
+  } else {
+    window.location.href = '../Netflix-Clone/index.html'; // Redirect if no token
+  }
+});
+
+function fetchData(type, token) {
+  fetch(`http://localhost:8000/api/user/${type}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    }
+  })
+  .then(response =>  response.json())
+  .then(data => {
+    if (data && Array.isArray(data)) {
+      displayData(type, data);
+    }
+  })
+  .catch(err => console.error(`Error fetching ${type}:`, err));
+}
+
+function displayData(type, data) {
+  let container = document.getElementById(`${type}-container`);
+  container.innerHTML = '';
+
+  data.forEach(item => {
+    const div = document.createElement('div');
+    div.classList.add('item');
+    div.innerHTML = `
+      <img src="${item.posterUrl}" alt="${item.showTitle}" class="item-poster" />
+      <h3 class="item-title">${item.showTitle}</h3>
+    `;
+    container.appendChild(div);
+  });
+}
+
+// Getting Username of a User
+
+document.addEventListener('DOMContentLoaded', () => {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    window.location.href = 'http://127.0.0.1:5501/Frontent/Netflix-Clone/index.html'; // redirect to login
+    return;
+  }
+
+  fetch('http://localhost:8000/api/user/me', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }).then(response=>response.json())
+  .then(data => {
+    const name = data.name;
+    document.getElementById('userNameFetch').innerText = name;
+  })
+  .catch(err => {
+    console.error('Error fetching user name:', err);
+    alert('Session expired. Please login again.');
+    window.location.href = 'http://127.0.0.1:5501/Frontent/Netflix-Clone/index.html';
+  });
+});
+
+  </script>
+</body>
+</html>

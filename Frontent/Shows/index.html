@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="shortcut icon" href="../favicon.ico" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.3.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="style.css">
+    <style>
+        #usr
+        {
+            font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+            font-weight:900;
+            color:white;
+        }   
+    </style>
+</head>
+
+<body>
+
+    <div class="wrapper">
+
+        <div class="logout">
+            <span class="username"><i class="ri-account-circle-line"><span id="usr" style="font-size: 2.2vw;"></span></i> </span>
+            <button onclick="logout()">Logout <i class="ri-logout-box-line"></i></button>
+        </div>
+
+        <div class="search-logo">
+            <h1 class="logo"><span style="color:red;">Show</span>Search</h1>
+
+            <div class="menu">
+
+                <span> <a href="./favorite.html"><i class="ri-star-fill" style="color: yellow;"></i><span>Favorites</span></a> </span>
+                <span> <a href="./watchlist.html"><i class="ri-play-circle-fill" style="color:rgb(217, 65, 91)"></i><span>Watchlist</span></a> </span>
+                
+
+
+            </div>
+
+            <div class="search">
+                <input type="text" placeholder="Search Your Shows Here">
+                <button id="searchApi"> <i class="ri-search-line"></i></button>
+            </div>
+        </div>
+
+        <h1></h1>
+
+
+        <div id="list">
+
+
+        </div>
+
+        <div class="prev-next">
+            <button id="prev">&lt;</button>
+            <button id="next">&gt;</button>
+        </div>
+
+    </div>
+
+    <!-- <img src="" alt=""> -->
+
+    <script src="https://unpkg.com/axios@1.6.7/dist/axios.min.js"></script>
+
+    <script>
+
+        let input = document.querySelector('input')
+        let btn = document.getElementById('searchApi')
+        let list = document.getElementById('list')
+
+        let prev = document.getElementById('prev')
+        let next = document.getElementById('next')
+
+
+        if (list) {
+
+            prev.addEventListener('click', () => {
+                list.scrollTo({
+
+                    left: list.scrollLeft - list.firstElementChild.offsetWidth,
+                    behavior: "smooth"
+                })
+            });
+
+
+            next.addEventListener('click', () => {
+                list.scrollTo({
+
+                    left: list.scrollLeft + list.firstElementChild.offsetWidth,
+                    behavior: "smooth"
+                })
+            })
+        }
+
+
+        if (input.value == "") {
+            axios.get(`https://api.tvmaze.com/shows`)
+                .then(function (response) {
+
+                    // console.log(response.data);
+
+                    for (let i of response.data) {
+                        if (i.image.original) {
+                          
+                            let allEle = document.createElement('div')
+                            let img = document.createElement('img')
+                            let addtoFav = document.createElement('button')
+                            addtoFav.innerText = 'Add to Favorites'
+                            let addtoWatch = document.createElement('button')
+                            addtoWatch.innerText = 'Add to Watchlist'
+                            // let addtoSearch = document.createElement('button')
+                            // addtoSearch.innerText = 'Add to Search History'
+
+                            console.log(i.show)
+                            addtoFav.onclick = () => addToFavorites(i)
+
+                            addtoWatch.onclick = () => addToWatchlist(i)
+                            // addtoSearch.onclick = () => addToSearchHistory(i)
+
+                            img.setAttribute('src', i.image.original)
+                            img.onclick = () => window.open(i.url)
+                            allEle.append(img, addtoFav, addtoWatch)
+                            allEle.setAttribute('class', 'all-elements')
+
+                            list.appendChild(allEle)
+
+
+
+                        }
+                    }
+                    prev.style.opacity = '1';
+                    next.style.opacity = '1';
+
+                    // manipulateDom(response.data);
+
+                })
+        }
+
+
+
+
+
+        function fetchData(searchText) {
+            axios.get(`https://api.tvmaze.com/search/shows?q=${searchText}`)
+                .then(function (response) {
+
+                    manipulateDom(response.data);
+
+                })
+
+
+        }
+
+        function manipulateDom(data) {
+            while (list.firstChild) {
+                list.firstChild.remove();
+            }
+
+
+            for (let i of data) {
+                if (i.show.image) {
+
+                    // console.log(i);
+
+                    let allEle = document.createElement('div')
+                    let img = document.createElement('img')
+                    let addtoFav = document.createElement('button')
+                    addtoFav.innerText = 'Add to Favorites'
+                    let addtoWatch = document.createElement('button')
+                    addtoWatch.innerText = 'Add to Watchlist'
+                     
+
+                    console.log(i.show)
+                    addtoFav.onclick = () => {
+                        addToFavorites(i.show)
+                        console.log(i.show)
+                    }
+                    addtoWatch.onclick = () => addToWatchlist(i.show)
+
+                    // addtoSearch.onclick = () => addToSearchHistory(i.show)
+
+                    img.setAttribute('src', i.show.image.original)
+                    img.onclick = () => window.open(i.show.url)
+                    allEle.append(img, addtoFav, addtoWatch)
+                    allEle.setAttribute('class', 'all-elements')
+
+                    list.appendChild(allEle)
+
+                }
+                prev.style.opacity = '1';
+                next.style.opacity = '1';
+            }
+        }
+
+
+        btn.addEventListener('click', () => {
+            let searchText = input.value;
+            fetchData(searchText);
+
+
+        })
+
+        function logout() {
+            localStorage.removeItem('token');
+            console.log("Auth token removed")
+            window.location.href = 'http://127.0.0.1:5501/Frontent/Netflix-Clone/index.html';
+        }
+
+
+        // Function of Adding to Favorites
+
+        function addToFavorites(show) {
+            const token = localStorage.getItem('token');
+            if (!token) return alert("Please log in first.");
+
+            const showData = {
+                id: show.id,
+                name: show.name,
+                image: show.image.original,
+
+            };
+
+            fetch('http://localhost:8000/api/user/favorites', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(showData)
+            })
+                .then(res => {
+                   
+                     if(res.status===409) alert(`${show.name} Already exist in favorites`)
+                   else if (res.ok) alert(`${show.name} added to favorites`);
+                   
+                    else throw new Error('Failed to add');
+                })
+                .catch(err => alert(err.message));
+        }
+
+
+        // Function to add in the addtoWatchlist
+        function addToWatchlist(show) {
+            const token = localStorage.getItem('token');
+            if (!token) return alert("Please log in first.");
+
+            const showData = {
+                id: show.id,
+                name: show.name,
+                image: show.image.original,
+                url: show.url,
+                genres: show.genres,
+                rating: show.rating.average,
+                summary: show.summary
+            };
+
+            fetch('http://localhost:8000/api/user/watchlist', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(showData)
+            })
+                .then(res => {
+                     if (res.ok) alert(`${show.name} added to watchlist`);
+                    else throw new Error('Failed to add');
+                })
+                .catch(err => alert(err.message));
+        }
+
+
+        // Showing Username of a User
+        document.addEventListener('DOMContentLoaded', () => {
+  const token = localStorage.getItem('token');
+
+  if (!token) {
+    window.location.href = 'index.html'; // redirect to login
+    return;
+  }
+
+  fetch('http://localhost:8000/api/user/me', {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  }).then(response=>response.json())
+  .then(data => {
+    const name = data.name;
+    document.getElementById('usr').innerText = name;
+  })
+  .catch(err => {
+    console.error('Error fetching user name:', err);
+    alert('Session expired. Please login again.');
+    window.location.href = 'http://127.0.0.1:5501/Frontent/Netflix-Clone/index.html';
+  });
+});
+
+
+
+    </script>
+
+
+
+</body>
+
+</html>

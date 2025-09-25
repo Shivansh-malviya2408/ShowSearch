@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+
+.bg-nav-main
+{
+    height: 99.9dvh;
+    width: 99.9dvw;
+    background-image: url(./background-netflix.jpg);
+    background-size:115%;
+    background-position: center ;
+    position: relative;
+    /* background-size:contain; */
+    /* object-fit: cover; */
+ 
+
+}
+
+.bg-black
+{
+    height: 100dvh;
+    width: 99.9dvw;
+    background-color: rgba(0, 0, 0, 0.676);
+    /* border: 2px solid white; */
+   box-shadow: 0px 30px 100px  inset black ;
+}
+
+
+        .content-home {
+            display: flex;
+            flex-direction: row;
+            height: 40vw;
+            /* border: 2px solid white; */
+            position: absolute;
+            left: 0%;
+            justify-content: space-around;
+            width: 99%;
+            
+        }
+
+        .left-side-signup {
+            width: 45%;
+            display: flex;
+            flex-direction: column;
+        
+            
+        }
+
+         #first-span  {
+            font-size: 40px;
+            font-family: "Poppins", sans-serif;
+            font-weight: 850;
+            /* position: relative; */
+            padding: 10px
+                /* left: 30%; */
+
+        }
+
+        #second-span {
+            font-size: 30px;
+            font-family: "Poppins", sans-serif;
+            font-weight: 700;
+            /* position: relative; */
+            padding: 10px
+        }
+
+        .third-span {
+            font-size: 25px;
+            font-family: "Poppins", sans-serif;
+            font-weight: 550;
+          
+            /* position: relative; */
+            padding: 10px
+                /* left: 30%; */
+
+        }
+        .fourth-span
+        {
+            font-size: 28px;
+            font-family: "Poppins", sans-serif;
+            font-weight: 700;
+            /* position: relative; */
+            padding: 10px
+                /* left: 30%; */
+        }
+
+         
+        .right-side-signup {
+            display: flex;
+            flex-direction: column;
+            /* border: 2px solid white; */
+            width: 40%;
+
+
+        }
+
+        .email-get>input {
+            background: rgba(0, 0, 0, 0.598);
+            border: 1px solid rgba(255, 255, 255, 0.507);
+            width: 60%;
+            font-family: "Poppins", sans-serif;
+            font-weight: 500;
+            margin-top: 20px;
+            height: 50px;
+            position: relative;
+            padding-left: 20px;
+            bottom: 5px;
+            color: white;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="bg-nav-main">
+        <div class="bg-black"></div>
+        <nav class="navbar">
+
+            <h1 class="logo svg-netflix"><span style="color:red;">Show</span>Search</h1>
+
+            <!-- <nav class="lang-in">
+
+                <select name="" id="">
+                    <option value="">English</option>
+                    <option value="">हिन्दी </option>
+                </select>
+                <a href="./signup.html"><button class="sign-in">
+                        Sign In
+                    </button></a>
+            </nav> -->
+        </nav>
+
+        <div class="content-home">
+            <div class="left-side-signup">
+                <span id="first-span"><span style="color:darkorange">Signup</span> to <span style="color:#e50815;">Enjoy</span></span>
+                <span id="second-span"> Unlimited movies, TV shows and more</span>
+                <span class="third-span">Watch anywhere. Cancel anytime.</span>
+                <span class="fourth-span">Ready to watch? Enter your email to create or start your membership.</span>
+            </div>
+
+            <div class="right-side-signup">
+                <form class="email-get" id="signup-form">
+                    <input type="text" id="signup-name" placeholder="Name" required><br>
+                    <input type="email" id="signup-email" placeholder="Email Address"><br>
+                    <input type="password" id="signup-password" placeholder="Password" required><br>
+                    <button type="submit">Sign Up</button>
+                    <!-- <button type="submit"> Get Started &gt; </button> -->
+                </form>
+                <p style="font-size: 1.4vw;">Already have an account? <a style="text-decoration:underline; color: red;"
+                        href="./index.html">Login</a></p>
+            </div>
+
+        </div>
+
+
+
+    </main>
+
+
+
+
+
+    <!-- <h2>Sign Up</h2>
+    <form id="signup-form">
+        <input type="text" id="signup-name" placeholder="Name" required><br>
+        <input type="email" id="signup-email" placeholder="Email" required><br>
+        <input type="password" id="signup-password" placeholder="Password" required><br>
+        <button type="submit">Sign Up</button>
+    </form>
+    <p>Already have an account? <a href="login.html">Login</a></p> -->
+
+    <script>
+        const signupForm = document.getElementById('signup-form');
+        signupForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const name = document.getElementById('signup-name').value;
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+
+            fetch('http://127.0.0.1:8000/api/auth/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, email, password })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.token) {
+                        localStorage.setItem('token', data.token);  // Store token in localStorage
+                        window.location.href = 'http://127.0.0.1:5501/Frontent/Shows/index.html';  // Redirect to the main dashboard
+                    } else {
+                        alert('Signup failed: ' + data.error);
+                    }
+                });
+        });
+    </script>
+</body>
+
+</html>

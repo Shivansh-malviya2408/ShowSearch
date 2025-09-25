@@ -1,0 +1,291 @@
+
+body
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* height: 100vh; */
+    width: 100vw;
+   background-color: black;
+
+   /* backdrop-filter: blur(8px); */
+   /* -webkit-backdrop-filter: blur(8px); */
+     display: flex;
+    justify-content: center; 
+    align-items: center;
+}
+
+ 
+.wrapper
+{
+    display: flex;
+    flex-direction: column;
+     height: 70%;
+     width: 80%;
+    /* border: 2px solid white; */
+    /* align-items: center; */
+    padding: 2vw 2vw;
+    gap: 1vw;
+    
+
+}
+
+.menu
+{
+    display: flex;
+    font-size: 1.3vw;
+    width: 30vw;
+    height: 10vw;
+    /* border: 2px solid white; */
+    justify-content: center;
+    align-items: center;
+    gap: 10vw;
+    /* border: 2px solid white; */
+
+
+
+}
+.menu a{
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: white;
+    /* border: 2px solid white; */
+    justify-content: center;
+    /* text-align: center; */
+    /* width: 30vw; */
+    font-size: 3vw;
+    
+
+}
+.menu a>span{
+    font-size: 1vw;
+}
+.menu div
+{
+    display: flex;
+    flex-direction: column;
+}
+.menu i{
+    font-size: 3.2vw;
+}
+
+#list
+{
+    display: flex;
+     width: 100%;
+    /* border: 2px solid white; */
+     overflow-y: scroll;
+     overflow-y: scroll; 
+     scroll-snap-type: x mandatory;
+     scroll-snap-align:center;
+     gap: 3vw;
+     /* padding: 2vw 0vw; */
+    height: 40vh;
+    /* overflow-x: scroll; */
+    /* overflow-y: scroll; */
+ 
+    
+    
+}
+.all-elements
+{
+    display: flex;
+    flex-direction: column;
+    height: 35vh;
+    width: 20vw;
+
+     
+}
+ 
+.all-elements>img
+{
+    height: 90%;
+    width: 15vw;
+    border-radius: 0.5vw;
+    
+   /* box-shadow: 1px 1px 2px white; */
+   /* object-fit: contain; */
+   /* object-fit:co; */
+   
+   
+    &:hover{
+        transform: scale(0.9);
+        border-radius: 1vw;
+        transition-duration: .3s;
+    }
+}
+.all-elements>button{
+    width: 15vw;
+    height: 5vh;
+    border-radius: 0.4vw;
+    background-color: rgba(228, 38, 38, 0.904);
+    color: white;
+    font-weight: 800;
+
+    &:hover{
+        transform: scale(1.05);
+        border-radius: 1vw;
+        transition-duration: .3s;
+    }
+}
+
+#list>a
+{
+    height: 100%;
+    width: 20vw;
+    border-radius: 1vw;
+   box-shadow: 1px 1px 2px white;
+   
+   
+    &:hover{
+        transform: scale(1.05);
+        border-radius: 1vw;
+        transition-duration: .3s;
+    }
+}
+ 
+ 
+
+
+.search input
+{
+   
+    height: 100%;
+    width: 20vw;
+    background: none;
+    display: flex;
+    font-size: 2vw;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    /* outline:2px solid red; */
+    outline: none;
+    text-align: center;
+    border: 2px solid white;
+    padding: 0vw 0vw;
+    border-top-left-radius: 2vw;
+    border-bottom-left-radius: 2vw;
+    color: white;
+
+    &::placeholder
+    {
+        color:grey;
+        font-size: 1.3vw;
+        text-align: center;
+    }
+
+}
+
+ 
+
+.search button
+{
+    height:100%;
+    background: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    
+}
+
+.search button>i{
+    color:white;
+    font-size: 3vw;
+   
+}
+
+.search
+{
+    height: 4vw;
+    display: flex;
+    align-items:center;
+    justify-content: center;
+    border: 2px solid white;
+    border-radius: 2vw;
+}
+
+
+.logout
+{
+    display: flex;
+    justify-content: space-between;
+    height: 5vw;
+    
+     
+}
+
+.username >i {
+    /* transform: translateX(4vw); */
+    background-color: transparent;
+    outline: none;
+    border: none;
+    font-size: 3.0vw;
+    color: white;
+
+  }
+
+  .username{
+    display: flex;
+    align-items:center;
+    text-align:center;
+    /* border: 2px solid white; */
+    justify-content: space-between;
+    width: 20vw;
+     
+
+  }
+
+
+.logout>button{
+    height: 3vw;
+    width: 7vw;
+    font-size: 1.2vw;
+    border-radius: 3vw;
+    outline: none;
+    background-color:rgb(255, 0, 0);
+    font-weight: 900;
+    color: white;
+     
+    
+    
+}
+
+
+.search-logo
+{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+}
+
+
+.logo
+{
+    font-size: 3vw;
+     color: white;
+     font-weight: 700;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.prev-next
+{
+   /* border: 2px solid white;  */
+   display: flex;
+   justify-content: center;
+   gap: 2vw;
+}
+
+.prev-next button{
+    height: 5vw;
+    width: 5vw;
+    border-radius: 50%;
+    background: white;
+
+    color: black;
+    font-size: 2vw;
+}
+
+.prev-next button
+{
+    opacity: 0;
+}
